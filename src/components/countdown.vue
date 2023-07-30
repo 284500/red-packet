@@ -46,7 +46,7 @@ defineExpose({
     align-items: center;
     width: 120px;
     height: 120px;
-    background-color: #fff;
+    // background-color: #fff;
   }
   .second{
     font-size: 50px;

@@ -18,9 +18,16 @@
 </template>
 <script setup>
 import { ref } from 'vue'
-const amount = ref(50);
+
 // const isShow=ref(true)
 const emit = defineEmits(['onclose'])
+const props = defineProps({
+	count: {
+		type: Number,
+		required: true,
+	}
+})
+const amount = ref(props.count);
 const close = function () {
   // isShow.value=false;
   emit('onclose', '组件关闭');

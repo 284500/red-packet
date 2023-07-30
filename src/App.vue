@@ -7,6 +7,7 @@
 import countdown from './components/countdown.vue';
 import record from './components/record.vue';
 import packet from './class/packet'
+import {getToken} from './util/cookie'
 import axios from 'axios'
 import {ref,onMounted} from 'vue'
 const test=ref(null);
@@ -33,10 +34,7 @@ const finish=function(e){
     clearInterval(timer)
     //红包雨结束开启奖励框
     recordShow.value=true;
-    const {data:{data}}= axios({
-					method: 'get',
-					url: `/api/api/v2/record/${key.value}`
-				})
+
     console.log(data)
   },5000)
   
@@ -52,14 +50,19 @@ const onclose=function(e){
 }
 onMounted(() => {
   
-  (async function start(){
-    let {data:{data}}=await axios({
-					method: 'get',
-					url: '/api/api/v1/send/100/20'
-				})
-    key.value=data;
+  (function start(){
+    let activityKey=''
+    let token=getToken();
+    const ws=new WebSocket(`ws://rb.atguigu.cn/api/websocket/${activityKey}/${token}`)
+    ws.onopen=()=>{
+      console.log('连接成功')
+    }
+    ws.onmessage=(event)=>{
+      key.value=event.data;
+      console.log('收到信息了')
+      console.log(key.value)
+    }
     console.log(key.value)
-    console.log(data)
     test.value.Show(4100);
   })();
 
